@@ -1,0 +1,4 @@
+kubectl create ns otus; kubectl apply -f manifests_hm1
+
+
+

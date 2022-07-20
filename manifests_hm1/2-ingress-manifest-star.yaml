@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp
+  namespace: otus
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2$3
+    #nginx.ingress.kubernetes.io/app-root: /destination
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - backend:
+              service:
+                name: myapp
+                port:
+                  number: 8000
+            pathType: Prefix
+            path: /otusapp/batova(/|$)(.*)
+            #path: /something(/|$)(.*)

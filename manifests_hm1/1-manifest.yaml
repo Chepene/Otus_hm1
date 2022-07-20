@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: myapp
+  namespace: otus
+spec: 
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 80
+  selector: 
+    app: myapp
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: otus
+  labels:
+    app: myapp
+spec: 
+  selector: 
+    matchLabels: 
+      app: myapp
+  replicas: 3
+  strategy:
+   type: Recreate 
+ #   type: RollingUpdate
+ #   rollingUpdate: 
+ #     maxSurge: 1
+ #     maxUnavailable: 0
+  template:
+    metadata: 
+      labels:
+        app: myapp
+    spec: 
+      containers: 
+        - name: simple-container
+          image: chepene/otus1-repo:v5
+          ports: 
+             - containerPort: 80
+          readinessProbe:
+            initialDelaySeconds: 5
+            httpGet:
+              path: /health
+              port: 80
